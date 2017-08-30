@@ -1,0 +1,13 @@
+{{>_header}}
+{{#userSession.AU}}<h6>Welcome back, {{userSession.robot.name}}!</h6>{{/userSession.AU}}
+<nav>
+  <a href="/robots/unemployed">Currently Unemployed</a> ||
+  <a href="/robots/employed">Currently Employed</a> ||
+  <a href="/">Login</a>
+</nav>
+  <main>
+    {{#robots}}
+      {{>_preview}}
+    {{/robots}}
+  </main>
+  {{>_footer}}

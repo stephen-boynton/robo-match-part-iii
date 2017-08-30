@@ -1,0 +1,33 @@
+{{>_header}}
+<main>
+  <div class="robot">
+    {{#robot}}
+    <img src="{{avatar}}" class="prof-pic">
+    <div>
+      <h1 class="name">{{{name}}}</h1>
+      <p>
+        {{#address.city}}{{address.city}}, {{/address.city}}{{address.country}} | {{#job}}{{job}}, {{company}}{{/job}}{{^job}}<span class="no-job">Available for hire</span>{{/job}}
+      </p>
+      <p>
+        {{email}} | {{phone}}
+      </p>
+    </div>
+  </div>
+  <div class="ed-skils">
+    <table>
+    {{#university}}  <tr>
+        <td class="left">Education: </td>
+        <td>{{university}}</td>
+      </tr>{{/university}}
+      <tr>
+        <td class="left">Skills:</td>
+        <td>{{#skills}}<p>{{.}}</p>{{/skills}}</td>
+      </tr>
+    </table>
+  </div>
+  <div class="back">
+    <a href="/home">< Back</a>
+  </div>
+  {{/robot}}
+</main>
+{{>_footer}}

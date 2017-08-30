@@ -1,0 +1,117 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: Helvetica, Arial, sans-serif;
+	line-height: 1.3em;
+}
+header {
+	text-align: center;
+	padding: 20px 0px;
+}
+
+#logo {
+	width: 50vw;
+}
+
+main {
+	width: 100%;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+
+nav {
+	display: block;
+	text-align: center;
+}
+
+h6 {
+	text-align: center;
+}
+
+.card {
+	flex-basis: 20%;
+	padding: 10px;
+	margin: 10px;
+	border: 1px solid lightgray;
+	border-radius: 10px;
+}
+
+.no-job {
+	color: red;
+}
+
+.prof-pic {
+	border-radius: 50%;
+	border: 1px solid lightgray;
+	margin-right: 20px;
+}
+
+h3 {
+	margin: 5px 0;
+}
+
+h3 a {
+	text-decoration: none;
+	color: SkyBlue;
+}
+
+.container {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+form {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+input {
+	margin-top: 10px;
+}
+
+button {
+	margin-top: 10px;
+	background-color: #ffa3a9;
+	border: none;
+	padding: 10px;
+}
+
+.robot {
+	display: flex;
+	flex-basis: 100%;
+	justify-content: center;
+	align-items: center;
+}
+
+.name {
+	font-weight: lighter;
+	font-size: 2.5em;
+}
+
+td {
+	padding: 10px;
+	vertical-align: text-top;
+}
+
+.left {
+	text-align: right;
+	font-weight: bold;
+}
+
+.back {
+	margin-top: 40px;
+	flex-basis: 100%;
+	text-align: center;
+}
+
+footer {
+	padding: 20px;
+	text-align: center;
+	margin-top: 20px;
+}

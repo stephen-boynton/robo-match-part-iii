@@ -1,0 +1,7 @@
+<div class="card">
+  <img src="{{avatar}}">
+  <h3><a href="/{{_id}}">{{name}}</a></h3>
+
+  {{#job}}<p>{{job}}, {{company}}</p>{{/job}}
+  {{^job}}<p class="no-job">Available for hire!</p>{{/job}}
+</div>

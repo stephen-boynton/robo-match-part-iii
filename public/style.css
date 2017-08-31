@@ -38,6 +38,11 @@ h6 {
 	border-radius: 10px;
 }
 
+.signup-form {
+	display: flex;
+	flex-direction: column;
+}
+
 .no-job {
 	color: red;
 }
@@ -55,6 +60,10 @@ h3 {
 h3 a {
 	text-decoration: none;
 	color: SkyBlue;
+}
+
+.card img {
+	max-width: 150px;
 }
 
 .container {

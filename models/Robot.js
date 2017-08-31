@@ -1,11 +1,16 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt-nodejs");
 
 const RobotSchema = new mongoose.Schema({
 	username: { type: String },
-	name: { type: String },
+	name: { type: String, default: "robot" },
 	password: { type: String, default: "0101" },
-	avatar: { type: String },
-	email: { type: String },
+	avatar: {
+		type: String,
+		default:
+			"https://lh4.googleusercontent.com/-oPlgOXbQxRg/AAAAAAAAAAI/AAAAAAAAAE0/MVRi3AcYzFg/photo.jpg"
+	},
+	email: { type: String, default: "ab@robot.com" },
 	university: { type: String },
 	job: { type: String },
 	company: { type: String },
@@ -21,33 +26,17 @@ const RobotSchema = new mongoose.Schema({
 	}
 });
 
+RobotSchema.statics.generateHash = function(password) {
+	return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+};
+
+// checking if password is valid
+RobotSchema.methods.validPassword = function(password, dbpassword, done) {
+	bcrypt.compare(password, dbpassword, (err, isMatch) => {
+		done(err, isMatch);
+	});
+};
+
 const Robot = mongoose.model("Robot", RobotSchema);
 
 module.exports = Robot;
-
-// MoonSchema.pre("save", function(next) {
-// 	if (Moon.find({ name: this.name })) {
-// 		return console.log("This moon already exists");
-// 	} else {
-// 		next();
-// 	}
-// });
-
-// MoonSchema.pre("save", function(next) {
-// 	let siblings = [];
-// 	Moon.find({ planet: this.planet }).then(moons => {
-// 		moons.forEach((elm, ind, arr) => {
-// 			this.siblings.push(elm.name);
-// 			elm.siblings.push(this.name);
-// 		});
-// 		console.log(this);
-// 		next();
-// 	});
-// });
-// MoonSchema.statics.findSiblings = function (planet, cb) {
-// 	return this.find({planet: planet})
-// }
-
-// PersonSchema.statics.findByEmail = function (email, cb) {
-//   return this.find({ email: email })
-// }

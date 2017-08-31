@@ -1,11 +1,10 @@
 {{>_header}}
-<div class="container">
-  <h1>RoboMATCH Login</h1>
-<p>{{userSession.message}}</p>
-  <form class="login" action="/login" method="POST">
+<h2>Sign Up for RoboMATCH!</h2>
+<div class="signup">
+  <form class="signup-form" action="/signed" method="POST">
     <input type="text" name="username" placeholder="username" autofocus required>
     <input type="password" name="password" placeholder="password" required>
-    <button type="submit" name="button">Log In</button>
+    <button type="submit" name="button">Sign Up!</button>
   </form>
 </div>
 {{>_footer}}

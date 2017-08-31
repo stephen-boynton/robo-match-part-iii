@@ -1,9 +1,10 @@
 {{>_header}}
-{{#userSession.AU}}<h6>Welcome back, {{userSession.robot.name}}!</h6>{{/userSession.AU}}
+{{#loggedIn}}<h6>Welcome back, {{userSession.robot.name}}!</h6>{{/loggedIn}}
 <nav>
   <a href="/robots/unemployed">Currently Unemployed</a> ||
   <a href="/robots/employed">Currently Employed</a> ||
-  <a href="/">Login</a>
+  {{^loggedIn}}<a href="/">Login</a>{{/loggedIn}}
+  {{#loggedIn}}<a href="/robots/logout">Logout</a>{{/loggedIn}}
 </nav>
   <main>
     {{#robots}}

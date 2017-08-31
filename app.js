@@ -3,13 +3,13 @@ const app = express();
 const mustacheExpress = require("mustache-express");
 const bodyParser = require("body-parser");
 const session = require("express-session");
-const {
-	getRobots,
-	getUnemployed,
-	getEmployed,
-	getUser,
-	getByID
-} = require("./dal");
+const passport = require("passport");
+const MongoStore = require("connect-mongo")(session);
+const roboRoutes = require("./routes/robo-routes");
+const { getUser, addRobot } = require("./dal");
+const passportConfig = require("./models/passport");
+const { isAuthenticated } = require("./models/passport");
+// const local = require("./models/passport")(passport);
 
 app.engine("mustache", mustacheExpress());
 app.set("view engine", "mustache");
@@ -19,85 +19,74 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use(
 	session({
-		secret: "hamsandwich",
-		saveUninitialized: false,
-		resave: false
+		resave: true,
+		saveUninitialized: true,
+		secret: "hamsammy"
 	})
 );
 
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(isAuthenticated);
+
 app.use((req, res, next) => {
+	console.log("Auth check " + req.session.AU);
 	if (req.session.AU) {
+		console.log("selecting true");
+		req.session.AU = true;
 		next();
 	} else {
-		req.session.AU = false;
+		console.log("selecting false");
+		req.session.AU = undefined;
 		next();
 	}
 });
 
-function loginCheck(req, res, next) {
-	const user = req.body.username;
-	const pwd = req.body.password;
-	getUser(user).then(robo => {
-		console.log(pwd, robo.password);
-		if (pwd === robo.password) {
-			req.session.AU = true;
-			req.session.robot = robo;
-			next();
-		} else {
-			req.session.AU = false;
-			req.session.message = "Incorrect username/password...";
-			res.redirect("/");
-		}
-	});
-}
+// function loginCheck(req, res, next) {
+// 	const user = req.body.username;
+// 	const pwd = req.body.password;
+// 	getUser(user).then(robo => {
+// 		console.log(pwd, robo.password);
+// 		if (pwd === robo.password) {
+// 			req.session.AU = true;
+// 			req.session.robot = robo;
+// 			next();
+// 		} else {
+// 			req.session.AU = false;
+// 			req.session.message = "Incorrect username/password...";
+// 			res.redirect("/");
+// 		}
+// 	});
+// }
+
+app.use("/robots", roboRoutes);
 
 app.get("/", (req, res) => {
 	const userSession = req.session;
 	res.render("login", { userSession });
 });
 
-app.post("/logged", loginCheck, (req, res) => {
-	if (req.session.AU) {
-		res.redirect("/robots");
-	} else {
+app.post(
+	"/login",
+	passport.authenticate("local", {
+		successRedirect: "/robots",
+		failureRedirect: "/"
+	})
+);
+
+app.get("/signup", isAuthenticated, (req, res) => {
+	res.render("sign-up");
+});
+
+app.post("/signed", (req, res) => {
+	addRobot(req.body).then(() => {
 		res.redirect("/");
-	}
-});
-
-app.get("/robots", (req, res) => {
-	const userSession = req.session;
-	getRobots().then(robots => {
-		console.log(robots);
-		res.render("home", { robots, userSession });
-	});
-});
-
-app.get("/:id", (req, res) => {
-	const userSession = req.session;
-	getByID(req.params.id).then(robot => {
-		if (userSession.robot._id === req.params.id) {
-			res.render("ind-edit", { robot, userSession });
-		} else {
-			res.render("individual", { robot, userSession });
-		}
 	});
 });
 
 app.get("/edit", (req, res) => {
 	const userSession = req.session;
 	res.redner("edit", { userSession });
-});
-
-app.get("/robots/unemployed", (req, res) => {
-	getUnemployed().then(unemployed => {
-		res.render("home", { robots: unemployed });
-	});
-});
-
-app.get("/robots/employed", (req, res) => {
-	getEmployed().then(employed => {
-		res.render("home", { robots: employed });
-	});
 });
 
 app.set("port", 3000);

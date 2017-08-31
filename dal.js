@@ -8,7 +8,6 @@ function getRobots() {
 }
 
 function getUser(user) {
-	console.log(user);
 	return Robot.findOne({ username: user });
 }
 
@@ -26,11 +25,46 @@ function getEmployed() {
 	return Robot.find({ job: { $ne: null } });
 }
 
+function addRobot(newRobot) {
+	const hash = Robot.generateHash(newRobot.password);
+	const robot = new Robot({
+		username: newRobot.username,
+		password: hash
+	});
+	robot.save(function(err) {
+		console.log(err);
+	});
+	return Promise.resolve("success");
+}
+
+function updateRobot(info, id) {
+	console.log(id);
+	Robot.update(
+		{ _id: id },
+		{
+			$set: {
+				name: info.name,
+				avatar: info.avatar,
+				email: info.email,
+				university: info.university,
+				job: info.job
+			}
+		},
+		function(err, raw) {
+			if (err) return handleError(err);
+			console.log("The raw response from Mongo was ", raw);
+		}
+	);
+	return Promise.resolve("success");
+}
+
 module.exports = {
 	editRobots,
 	getRobots,
 	getUser,
 	getByID,
 	getEmployed,
-	getUnemployed
+	getUnemployed,
+	updateRobot,
+	addRobot
 };
